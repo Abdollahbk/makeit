@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: var(--slate-800);
+  background: var(--background);
+  overflow: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: var(--slate-900);
+}
+
+/* Custom Scrollbar - Premium Dark Style */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--slate-950);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--slate-800);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--slate-700);
+}
+
+/* Interactive elements transition */
+a, button, input, select, textarea {
+  transition: var(--transition);
+}
+
+/* Focus states */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+/* Tooltip or small info elements */
+.tooltip {
+  font-size: 0.75rem;
+  color: var(--slate-500);
+}
+
+@media print {
+  body {
+    background: white;
+  }
+}

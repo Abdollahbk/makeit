@@ -1,0 +1,21 @@
+{
+  "name": "make-it-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=apps/builder\" \"npm run dev --workspace=apps/landing\" --names \"builder,landing\" --prefix-colors \"blue,green\"",
+    "dev:builder": "npm run dev --workspace=apps/builder",
+    "dev:landing": "npm run dev --workspace=apps/landing",
+    "build": "node scripts/build.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d apps/landing/dist"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "fs-extra": "^11.3.4",
+    "gh-pages": "^6.3.0"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@make-it/builder",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "@make-it/ui": "file:../../packages/ui",
+    "docx": "^9.6.1",
+    "file-saver": "^2.0.5",
+    "html2pdf.js": "^0.10.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-easy-crop": "^5.4.2",
+    "react-icons": "^5.5.0",
+    "react-image-crop": "^11.0.10",
+    "styled-components": "^6.1.19"
+  }
+}
