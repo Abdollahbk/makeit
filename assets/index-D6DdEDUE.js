@@ -236,7 +236,7 @@ Please change the parent <Route path="${w}"> to <Route path="${w==="/"?"*":`${w}
     gap: 1rem;
     text-align: center;
   }
-`,rM=()=>N.jsx(nM,{children:N.jsxs("div",{className:"container",children:[N.jsxs(iM,{children:[N.jsxs(aM,{children:[N.jsxs(lM,{to:"/",children:["Make",N.jsx("span",{children:"It"})]}),N.jsx("p",{children:"Build stunning, ATS-ready resumes in minutes. Completely private, fully customizable, and entirely free."})]}),N.jsxs(k0,{children:[N.jsx(K0,{children:"Product"}),N.jsx(zf,{href:"#features",children:"Features"}),N.jsx(zf,{href:"#templates",children:"Templates"}),N.jsx(zf,{href:"http://localhost:5173",children:"App"})]}),N.jsxs(k0,{children:[N.jsx(K0,{children:"Legal"}),N.jsx(Q0,{to:"/privacy",children:"Privacy Policy"}),N.jsx(Q0,{to:"/terms",children:"Terms of Service"})]})]}),N.jsx(sM,{children:N.jsxs("p",{children:["© ",new Date().getFullYear()," MakeIt CV Builder. All rights reserved."]})})]})}),oM=tt.section`
+`,rM=()=>N.jsx(nM,{children:N.jsxs("div",{className:"container",children:[N.jsxs(iM,{children:[N.jsxs(aM,{children:[N.jsxs(lM,{to:"/",children:["Make",N.jsx("span",{children:"It"})]}),N.jsx("p",{children:"Build stunning, ATS-ready resumes in minutes. Completely private, fully customizable, and entirely free."})]}),N.jsxs(k0,{children:[N.jsx(K0,{children:"Product"}),N.jsx(zf,{href:"#features",children:"Features"}),N.jsx(zf,{href:"#templates",children:"Templates"}),N.jsx(zf,{href:"./builder/",children:"App"})]}),N.jsxs(k0,{children:[N.jsx(K0,{children:"Legal"}),N.jsx(Q0,{to:"/privacy",children:"Privacy Policy"}),N.jsx(Q0,{to:"/terms",children:"Terms of Service"})]})]}),N.jsx(sM,{children:N.jsxs("p",{children:["© ",new Date().getFullYear()," MakeIt CV Builder. All rights reserved."]})})]})}),oM=tt.section`
   min-height: 100vh;
   padding: 120px 0 80px;
   display: flex;
@@ -386,9 +386,9 @@ Please change the parent <Route path="${w}"> to <Route path="${w==="/"?"*":`${w}
   background-size: cover;
   background-position: top center;
   
-  &.modern { background-image: url('/temp3.png'); }
-  &.timeline { background-image: url('/temp2.png'); }
-  &.classic { background-image: url('/temp1.png'); }
+  &.modern { background-image: url('./temp3.png'); }
+  &.timeline { background-image: url('./temp2.png'); }
+  &.classic { background-image: url('./temp1.png'); }
 `,KM=tt.div`
   position: absolute;
   top: 0;
@@ -413,7 +413,7 @@ Please change the parent <Route path="${w}"> to <Route path="${w==="/"?"*":`${w}
   color: var(--slate-300);
   margin-bottom: 1.5rem;
   font-size: 0.875rem;
-`,PM=()=>{const n=[{id:"modern",name:"Modern",desc:"Clean, bold, and perfect for creative roles.",class:"modern"},{id:"timeline",name:"Timeline",desc:"Focus on your career progression with elegant lines.",class:"timeline"},{id:"classic",name:"Classic",desc:"Traditional and professional. Best for corporate jobs.",class:"classic"}];return N.jsx(UM,{id:"templates",children:N.jsxs("div",{className:"container",children:[N.jsxs(HM,{children:[N.jsx(YM,{children:"Templates for Every Career"}),N.jsx(GM,{children:"Start with a professionally designed layout and customize it to match your style."})]}),N.jsx(qM,{children:n.map((a,s)=>N.jsxs(XM,{initial:{opacity:0,scale:.95},whileInView:{opacity:1,scale:1},viewport:{once:!0,margin:"-50px"},transition:{duration:.5,delay:s*.1},children:[N.jsx(kM,{className:a.class}),N.jsxs(KM,{className:"overlay",children:[N.jsx(QM,{children:a.name}),N.jsx(ZM,{children:a.desc}),N.jsx(cs,{href:"http://localhost:5173",variant:"primary",children:"Use Template"})]})]},a.id))})]})})},FM=tt.section`
+`,PM=()=>{const n=[{id:"modern",name:"Modern",desc:"Clean, bold, and perfect for creative roles.",class:"modern"},{id:"timeline",name:"Timeline",desc:"Focus on your career progression with elegant lines.",class:"timeline"},{id:"classic",name:"Classic",desc:"Traditional and professional. Best for corporate jobs.",class:"classic"}];return N.jsx(UM,{id:"templates",children:N.jsxs("div",{className:"container",children:[N.jsxs(HM,{children:[N.jsx(YM,{children:"Templates for Every Career"}),N.jsx(GM,{children:"Start with a professionally designed layout and customize it to match your style."})]}),N.jsx(qM,{children:n.map((a,s)=>N.jsxs(XM,{initial:{opacity:0,scale:.95},whileInView:{opacity:1,scale:1},viewport:{once:!0,margin:"-50px"},transition:{duration:.5,delay:s*.1},children:[N.jsx(kM,{className:a.class}),N.jsxs(KM,{className:"overlay",children:[N.jsx(QM,{children:a.name}),N.jsx(ZM,{children:a.desc}),N.jsx(cs,{href:"./builder/",variant:"primary",children:"Use Template"})]})]},a.id))})]})})},FM=tt.section`
   padding: 100px 0;
   background: var(--slate-950);
   color: white;
