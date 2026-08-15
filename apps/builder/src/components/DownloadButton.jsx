@@ -200,8 +200,8 @@ const DownloadButton = ({ cvData, template, language }) => {
       };
 
       await html2pdf().from(previewNode).set(options).save();
-      
-      previewNode.style.transform = originalTransform;
+      /*This commented line loads an empty pdf file*/
+      /*previewNode.style.transform = originalTransform;*/
     } catch (error) {
       console.error('Error generating PDF:', error);
     } finally {
