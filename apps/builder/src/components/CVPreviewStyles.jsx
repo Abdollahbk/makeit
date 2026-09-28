@@ -158,16 +158,38 @@ export const PhotoImg = styled.img`
   box-shadow: var(--shadow);
 `;
 
-export const PreviewWrapper = styled.div`
+export const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  align-items: center;
+  padding: 1rem 0;
+`;
+
+export const Page = styled.div`
   width: 210mm;
-  min-height: 297mm;
-  height: auto;
+  height: 297mm;
   background: #fff;
-  margin: 0;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
   position: relative;
-  overflow: visible;
-  direction: ${props => props.language === 'ar' ? 'rtl' : 'ltr'};
+  overflow: hidden;
+  direction: ${props => props.$language === 'ar' ? 'rtl' : 'ltr'};
+  page-break-after: always;
+  flex-shrink: 0;
+
+  &:last-child {
+    page-break-after: auto;
+  }
+`;
+
+export const PreviewWrapper = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;

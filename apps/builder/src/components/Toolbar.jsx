@@ -174,7 +174,7 @@ const Toolbar = ({
   language
 }) => {
   return (
-    <ToolbarContainer style={style} fullscreen={fullscreen}>
+    <ToolbarContainer style={style} $fullscreen={fullscreen}>
       <ToolbarGroup>
         <ToolbarSelect value={font} onChange={e => setFont(e.target.value)}>
           <option value="Inter">Inter</option>

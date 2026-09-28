@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // Use relative paths for assets
+  base: process.env.VITE_BASE_PATH || (process.env.GITHUB_ACTIONS ? '/makeit/' : '/'),
   build: {
     outDir: 'dist',
   }

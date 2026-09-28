@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import CVForm from './components/CVForm';
 import CVPreview from './components/CVPreview';
@@ -6,10 +6,16 @@ import DownloadButton from './components/DownloadButton';
 import Toolbar from './components/Toolbar';
 import './styles/colors.css';
 import translations from './translations';
-import { FiGlobe, FiDownload, FiEye, FiEdit2 } from 'react-icons/fi';
-import { FiChevronDown } from 'react-icons/fi';
+import { Routes, Route, Navigate, Link, useSearchParams } from 'react-router-dom';
+import { FiGlobe, FiDownload, FiEye, FiEdit2, FiArrowLeft, FiChevronDown, FiAward } from 'react-icons/fi';
 import { MdViewCarousel } from 'react-icons/md';
 import ReactDOM from 'react-dom';
+import Landing from './pages/Landing';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import ATSPage from './pages/ATSPage';
+import ATSScoreModal from './components/ATSScoreModal';
+import { auditCVStructure } from './utils/atsEngine';
 
 const Root = styled.div`
   height: 100vh;
@@ -107,7 +113,16 @@ const RightPanel = styled.div`
 
   @media (max-width: 768px) {
     width: 100%;
-    display: ${props => props.$mobileView === 'preview' ? 'flex' : 'none'};
+    ${props => props.$mobileView === 'preview' ? `
+      display: flex;
+    ` : `
+      position: fixed;
+      left: -99999px;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      display: flex;
+    `}
   }
 `;
 
@@ -134,10 +149,9 @@ const PreviewContainer = styled.div`
   min-height: calc(100vh - 120px);
 `;
 
-const PageContainer = styled.div`
+const PreviewScaler = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 30px;
   align-items: center;
   padding-bottom: 50px;
 `;
@@ -219,6 +233,27 @@ const TemplateIconButton = styled(NavButton)`
   border-radius: var(--radius);
 `;
 
+const ATSScoreBadgeButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: ${props => props.$score >= 80 ? 'rgba(16, 185, 129, 0.15)' : props.$score >= 60 ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)'};
+  border: 1px solid ${props => props.$score >= 80 ? 'rgba(16, 185, 129, 0.4)' : props.$score >= 60 ? 'rgba(245, 158, 11, 0.4)' : 'rgba(239, 68, 68, 0.4)'};
+  color: ${props => props.$score >= 80 ? '#34d399' : props.$score >= 60 ? '#fbbf24' : '#f87171'};
+  border-radius: var(--radius-full);
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 12px ${props => props.$score >= 80 ? 'rgba(16, 185, 129, 0.2)' : 'transparent'};
+
+  &:hover {
+    transform: translateY(-1px);
+    background: ${props => props.$score >= 80 ? 'rgba(16, 185, 129, 0.25)' : props.$score >= 60 ? 'rgba(245, 158, 11, 0.25)' : 'rgba(239, 68, 68, 0.25)'};
+  }
+`;
+
 const MobileToggleButton = styled.button`
   display: none;
   
@@ -247,9 +282,13 @@ const MobileToggleButton = styled.button`
   }
 `;
 
-function App() {
+function Builder() {
+  const [searchParams] = useSearchParams();
+  const templateParam = searchParams.get('template');
+  const initialTemplate = ['basic', 'timeline', 'modern'].includes(templateParam) ? templateParam : 'basic';
+
   const [cvData, setCVData] = useState(initialCVData);
-  const [template, setTemplate] = useState('basic');
+  const [template, setTemplate] = useState(initialTemplate);
   const [zoom, setZoom] = useState(window.innerWidth <= 768 ? 0.5 : 0.6);
   const [font, setFont] = useState('Inter');
   const [fontSize, setFontSize] = useState(12);
@@ -264,6 +303,27 @@ function App() {
 
   const currentLang = languageOptions.find(l => l.code === language) || languageOptions[0];
   const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [showAtsModal, setShowAtsModal] = useState(false);
+  const atsAudit = useMemo(() => auditCVStructure(cvData), [cvData]);
+
+  const handleAddSkill = (newSkill) => {
+    if (!newSkill) return;
+    setCVData(prev => {
+      const currentSkills = Array.isArray(prev.skills) ? [...prev.skills] : [];
+      const exists = currentSkills.some(s => 
+        (typeof s === 'string' ? s : s?.name || '').toLowerCase() === newSkill.toLowerCase()
+      );
+      if (exists) return prev;
+
+      const isStringArray = currentSkills.length === 0 || typeof currentSkills[0] === 'string';
+      const itemToAdd = isStringArray ? newSkill : { id: Date.now().toString(), name: newSkill, level: 'Advanced' };
+
+      return {
+        ...prev,
+        skills: [...currentSkills, itemToAdd]
+      };
+    });
+  };
   
   // Close language menu on outside click
   useEffect(() => {
@@ -297,8 +357,26 @@ function App() {
   return (
     <Root>
       <TopBar>
-        <Logo>{translations[language].cvTitle}</Logo>
+        <Logo
+          as={Link}
+          to="/"
+          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}
+          title="Back to Home"
+        >
+          <FiArrowLeft size={18} style={{ color: '#94a3b8' }} />
+          <span>{translations[language].cvTitle}</span>
+        </Logo>
         <ActionGroup>
+          {/* ATS Score Badge Button */}
+          <ATSScoreBadgeButton
+            onClick={() => setShowAtsModal(true)}
+            title="Open ATS Resume Optimizer"
+            $score={atsAudit.score}
+          >
+            <FiAward size={17} />
+            <span>ATS {atsAudit.score}%</span>
+          </ATSScoreBadgeButton>
+
           <div style={{ position: 'relative' }}>
             <NavButton
               ref={langBtnRef}
@@ -508,38 +586,27 @@ function App() {
             />
           </ToolbarWrapper>
           <PreviewContainer>
-            <PageContainer style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}>
-              <PageSheet>
-                <CVPreview 
-                  cvData={cvData} 
-                  font={font} 
-                  fontSize={fontSize}
-                  textColor={textColor}
-                  language={language}
-                  template={template}
-                />
-              </PageSheet>
-            </PageContainer>
-            
-            {/* Hidden container for high-quality export */}
-            <MeasurementWrapper id="cv-preview-measurement">
-              <PageSheet>
-                <CVPreview 
-                  cvData={cvData} 
-                  font={font} 
-                  fontSize={fontSize}
-                  textColor={textColor}
-                  language={language}
-                  template={template}
-                />
-              </PageSheet>
-            </MeasurementWrapper>
+            <PreviewScaler style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}>
+              <CVPreview 
+                cvData={cvData} 
+                font={font} 
+                fontSize={fontSize}
+                textColor={textColor}
+                language={language}
+                template={template}
+              />
+            </PreviewScaler>
           </PreviewContainer>
         </RightPanel>
       </MainSplit>
 
       {/* Mobile Toggle Button */}
-      <MobileToggleButton onClick={() => setMobileView(v => v === 'form' ? 'preview' : 'form')}>
+      <MobileToggleButton onClick={() => {
+        setMobileView(v => v === 'form' ? 'preview' : 'form');
+        if (window.innerWidth <= 768) {
+          setZoom(0.5);
+        }
+      }}>
         {mobileView === 'form' ? (
           <>
             <FiEye size={20} />
@@ -552,8 +619,28 @@ function App() {
           </>
         )}
       </MobileToggleButton>
+
+      {/* ATS Score & Optimizer Modal */}
+      <ATSScoreModal 
+        cvData={cvData}
+        isOpen={showAtsModal}
+        onClose={() => setShowAtsModal(false)}
+        onAddSkill={handleAddSkill}
+      />
     </Root>
   );
 }
 
-export default App; 
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/builder" element={<Builder />} />
+      <Route path="/ats" element={<ATSPage />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+ 

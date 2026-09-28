@@ -13,13 +13,13 @@ body {
   line-height: 1.5;
   color: var(--slate-800);
   background: var(--background);
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
-  color: var(--slate-900);
+  color: inherit;
 }
 
 /* Custom Scrollbar - Premium Dark Style */
